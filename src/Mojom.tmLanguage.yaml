@@ -1,0 +1,190 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+%YAML 1.2
+---
+name: Mojo
+scopeName: source.mojom
+fileTypes: [mojom]
+uuid: d6034141-e2ba-4d6f-bd45-07221fd4a460
+
+patterns:
+
+  - include: '#comment'
+  - include: '#module'
+  - include: '#import'
+  - include: '#struct'
+  - include: '#interface'
+  - include: '#enum'
+
+repository:
+
+  comment:
+    name:  comment.line.double-slash.mojom
+    begin: '//'
+    end:   '$'
+    beginCaptures:
+      0: { name: punctuation.definition.comment.mojom }
+
+  attribute:
+    name:  meta.attribute.mojom
+    begin: '\['
+    end:   '\]'
+    beginCaptures:
+      0: { name: punctuation.section.body.begin.mojom }
+    endCaptures:
+      0: { name: punctuation.section.body.end.mojom }
+    patterns:
+      - name:  storage.other.mojom
+        match: '\b(Sync|Extensible|Native|MinVersion|EnableIf)\b'
+
+  module:
+    name:  meta.module.mojom
+    begin: '\bmodule\b'
+    end:   ';'
+    beginCaptures:
+      0: { name: keyword.control.import.mojom }
+    endCaptures:
+      0: { name: punctuation.terminator.mojom }
+    patterns:
+      - include: '#module_name'
+
+  module_name:
+    name:  entity.name.module.mojom
+    match: '\b([a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)*)'
+
+  import:
+    name:  meta.import.mojom
+    begin: '\bimport\b'
+    end:   ';'
+    beginCaptures:
+      0: { name: keyword.control.import.mojom }
+    endCaptures:
+      0: { name: punctuation.terminator.mojom }
+    patterns:
+      - include: '#import_path'
+
+  import_path:
+    name:  string.quoted.double.mojom
+    match: '(")[^"]*(")'
+    captures:
+      1: { name: punctuation.definition.string.begin.mojom }
+      2: { name: punctuation.definition.string.end.mojom }
+
+  struct:
+    name:  meta.struct.mojom
+    begin: '\b(struct)\b\s+\b([a-zA-Z][a-zA-Z0-9_]*)\b'
+    end:   ';'
+    beginCaptures:
+      1: { name: storage.type.mojom }
+      2: { name: entity.name.struct.mojom }
+    endCaptures:
+      0: { name: punctuation.terminator.mojom }
+    patterns:
+      - include: '#struct_body'
+
+  struct_body:
+    name:  meta.block.mojom
+    begin: '{'
+    end:   '}'
+    beginCaptures:
+      0: { name: punctuation.section.body.begin.mojom.mojom }
+    endCaptures:
+      0: { name: punctuation.section.body.end.mojom }
+    patterns:
+      - include: '#comment'
+      - include: '#enum'
+      - include: '#constant'
+
+  interface:
+    name:  meta.interface.mojom
+    begin: '\b(interface)\b\s+\b([a-zA-Z][a-zA-Z0-9_]*)\b'
+    end:   ';'
+    beginCaptures:
+      1: { name: storage.type.mojom }
+      2: { name: entity.name.interface.mojom }
+    endCaptures:
+      0: { name: punctuation.terminator.mojom }
+    patterns:
+      - include: '#interface_body'
+
+  interface_body:
+    name:  meta.block.mojom
+    begin: '{'
+    end:   '}'
+    beginCaptures:
+      0: { name: punctuation.section.body.begin.mojom }
+    endCaptures:
+      0: { name: punctuation.section.body.end.mojom }
+    patterns:
+      - include: '#comment'
+      - include: '#attribute'
+      - include: '#enum'
+      - include: '#method'
+      - include: '#constant'
+
+  enum:
+    name:  meta.enum.mojom
+    begin: '\b(enum)\b\s+\b([a-zA-Z][a-zA-Z0-9_]*)\b'
+    end:   ';'
+    beginCaptures:
+      1: { name: storage.type.mojom }
+      2: { name: entity.name.enum.mojom }
+    endCaptures:
+      0: { name: punctuation.terminator.mojom }
+    patterns:
+      - include: '#enum_body'
+
+  enum_body:
+    name:  meta.block.mojom
+    begin: '{'
+    end:   '}'
+    beginCaptures:
+      0: { name: punctuation.section.body.begin.mojom }
+    endCaptures:
+      0: { name: punctuation.section.body.end.mojom }
+    patterns:
+      - include: '#comment'
+      - include: '#constant'
+
+      - name:  punctuation.separator.mojom
+        match: ','
+
+      - name:  entity.other.enumerator.mojom
+        match: '\b[A-Z][A-Z0-9_]*\b'
+
+  method:
+    name:  meta.method.mojom
+    begin: '\b[a-zA-Z][a-zA-Z0-9_]*'
+    end:   ';'
+    beginCaptures:
+      0: { name: entity.name.function.mojom }
+    endCaptures:
+      0: { name: punctuation.terminator.mojom }
+    patterns:
+      - name:  keyword.operator.mojom
+        match: '=>'
+
+  constant:
+    patterns:
+      - include: '#boolean'
+      - include: '#number'
+
+  boolean:
+    name:  constant.language.mojom
+    match: '\b(true|false)\b'
+
+  number:
+    name:  constant.numeric.mojom
+    match: '\b(0|[1-9]\d+)\b'
