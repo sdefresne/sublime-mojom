@@ -1,0 +1,14 @@
+{
+  "schema_version": "3.0.0",
+  "packages": [{
+      "name": "Mojom",
+      "description": "Syntax highlighting for Mojom files.",
+      "author": "Sylvain Defresne",
+      "releases": [{
+          "platforms": "*",
+          "version": "0.0.1",
+          "url": "https://github.com/sdefresne/sublime-mojom/releases/download/0.0.1/Mojom.sublime-package",
+          "date": "2018-05-17 14:56:03"
+      }]
+  }]
+}
