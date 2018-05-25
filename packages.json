@@ -9,7 +9,7 @@
       "releases": [{
           "sublime_text": ">=3176",
           "version": "0.0.1",
-          "url": "https://github.com/sdefresne/sublime-mojom/releases/download/0.0.1/Mojom.sublime-package",
+          "url": "https://github.com/sdefresne/sublime-mojom/releases/download/0.0.1/Mojom.sublime-package"
       }]
   }]
 }
